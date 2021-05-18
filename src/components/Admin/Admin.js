@@ -11,8 +11,8 @@ const Admin = () => {
         <Grid container>
           <Grid item xs={3} style={{backgroundColor:'lightgrey'}}>
             <ul>
-              <li><Link to='/addProduct'>Add Product</Link></li>
               <li><Link to='/manageProduct'>Manage Product</Link></li>
+              <li><Link to='/addProduct'>Add Product</Link></li>
               <li><Link to='/editProduct'>Edit Product</Link></li>
             </ul>
             

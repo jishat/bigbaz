@@ -17,7 +17,7 @@ const ShowProduct = (props) => {
     const classes=useStyle();
 //     console.log(props.product);
     const {productName,weight,price,imageURL,_id}=props.product
-//     console.log(productName,weight,price,imageURL,_id)
+
 
     const handleDelete=(event)=>{
         const product=event.target.parentNode.parentNode;
@@ -30,13 +30,11 @@ const ShowProduct = (props) => {
            console.log('success delete');
         })
             product.style.display='none';
-
-
     }
 
 
     return (
-        <div>
+        <>
             <Grid container>
                 <Grid className={classes.productDetails} item xs={2} spacing={2} >
                     <p>{productName}</p>
@@ -55,7 +53,7 @@ const ShowProduct = (props) => {
                 </Grid>
 
             </Grid>
-        </div>
+        </>
     );
 };
 

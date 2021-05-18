@@ -33,7 +33,8 @@ const ManageProduct = () => {
                     <p>Image URL</p>
                 </Grid>
             </Grid>
-            {product.map(pd=><ShowProduct product={pd}></ShowProduct>)}
+            {product.map(pd=><ShowProduct key={pd._id} product={pd}></ShowProduct>)}
+            {/* {product.map(pd=>console.log(pd))} */}
         </div>
     );
 };

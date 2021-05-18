@@ -5,7 +5,7 @@ const InputSection = () => {
     
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const onSubmit = data => {
-        const {productName, weight, price, img} = data;
+        const {productName, weight, price, category, img} = data;
         const imageData=new FormData();
         const imageBB_Key='bbb594f564f8063ab9fb112e4308e253';
         imageData.set('key', 'bbb594f564f8063ab9fb112e4308e253');
@@ -20,7 +20,8 @@ const InputSection = () => {
                   productName:productName,
                   weight:weight,
                   price:price,
-                  imageURL:response.data.data.display_url,
+                  category:category,
+                  imageURL:response.data.data.display_url
               }
               fetch('http://localhost:5000/addProduct',{
                   method:'POST',
@@ -42,21 +43,22 @@ const InputSection = () => {
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 
-                <input {...register("productName", { required: true })} />
-                {errors.exampleRequired && <span>This field is required</span>} <br />
+                <input placeholder="Product Name" {...register("productName", { required: true })} />
+                {errors.productName && <span>This field is required</span>} <br />
 
-                <input {...register("weight", { required: true })} />
-                {/* errors will return when field validation fails  */}
-                {errors.exampleRequired && <span>This field is required</span>}<br />
-                {/* include validation with required or other standard HTML validation rules */}
-                 <input {...register("price", { required: true })} />
-                {/* errors will return when field validation fails  */}
-                {errors.exampleRequired && <span>This field is required</span>}<br />
-                {/* include validation with required or other standard HTML validation rules */}
+                <input placeholder="Weight" {...register("weight", { required: true })} />
+                {errors.weight && <span>This field is required</span>}<br />
+ 
+                <input placeholder="Price" {...register("price", { required: true })} />
+                {errors.price && <span>This field is required</span>}<br />
+
+                <input placeholder="Category" {...register("category", { required: true })} />
+                {errors.category && <span>This field is required</span>}<br />
+
                 <input type="file"   {...register("img", { required: true })} />
-                {/* errors will return when field validation fails  */}
-                {errors.exampleRequired && <span>This field is required</span>}<br />
-            <input type="submit" />
+                {errors.img && <span>This field is required</span>}<br />
+
+                <input type="submit" />
             </form>
         </div>
     );
