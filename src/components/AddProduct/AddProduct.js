@@ -1,8 +1,11 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from "react-hook-form";
+import { menuActiveContext } from '../Admin/Admin';
 const InputSection = () => {
-    
+    const [selectedIndex, setSelectedIndex] = useContext(menuActiveContext);
+    setSelectedIndex(1);
+
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const onSubmit = data => {
         const {productName, weight, price, category, img} = data;

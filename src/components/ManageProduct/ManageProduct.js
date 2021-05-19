@@ -1,5 +1,6 @@
 import { Grid, makeStyles } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { menuActiveContext } from '../Admin/Admin';
 import ShowProduct from './ShowProduct';
 
 const useStyle=makeStyles(theme=>({
@@ -14,6 +15,9 @@ const useStyle=makeStyles(theme=>({
 const ManageProduct = () => {
     const classes=useStyle();
     const [product,setProduct]=useState([]);
+    const [selectedIndex, setSelectedIndex] = useContext(menuActiveContext);
+    setSelectedIndex(0);
+    
     useEffect(()=>{
         fetch('http://localhost:5000/manageProduct')
         .then(res=>res.json())
