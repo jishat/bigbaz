@@ -32,6 +32,10 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Cart from '../Cart/Cart';
 import { addToDatabaseCart, getDatabaseCart } from '../../databaseManager';
 import Review from '../Review/Review';
+import Checkout from '../Checkout/Checkout';
+import Login from '../Login/Login';
+import Register from '../Register/Register';
+import PrivateRoute from '../PrivateRoute/PrivateRoute';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -136,6 +140,8 @@ const StyledBadge = withStyles((theme) => ({
 
 export const menuActiveContext = createContext()
 export const cartContext = createContext()
+export const loggedUser = createContext()
+export const allProducts = createContext()
 
 const Home = (props)=> {
   const { window } = props;
@@ -143,7 +149,9 @@ const Home = (props)=> {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cart, setCart] = useState([]);
+  const [user, setUser] = useState([]);
   const [products, setProduct] = useState([]);
+
   useEffect(()=>{
       fetch('http://localhost:5000/manageProduct')
       .then(res=>res.json())
@@ -153,6 +161,7 @@ const Home = (props)=> {
 
   useEffect(()=>{
     const savedCart = getDatabaseCart();
+    
     const productKeys = Object.keys(savedCart);
     if(products.length > 0){
         const cartProduct = productKeys.map(key=>{
@@ -178,7 +187,10 @@ const Home = (props)=> {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
+      {/* <div>hi</div> */}
+      <div className={classes.toolbar}>
+        ffhfgh
+      </div>
       <Divider />
       <List>
         <Link component={RouterLink} to='/' color="inherit">
@@ -227,7 +239,7 @@ const Home = (props)=> {
       <div className={classes.cartFooter}>
         <ButtonGroup disableElevation variant="contained" color="secondary">
           
-            <Button onClick={toggleDrawer(anchor, false)}><Link component={RouterLink} to='/review' color="inherit">Review</Link></Button>
+          <Button onClick={toggleDrawer(anchor, false)}><Link component={RouterLink} to='/review' color="inherit">Review</Link></Button>
           
           <Button>৳ {cart.reduce((total, prd)=> total+prd.price*prd.quantity, 0)}</Button>
         </ButtonGroup>
@@ -235,113 +247,132 @@ const Home = (props)=> {
     </div>
   );
   const container = window !== undefined ? () => window().document.body : undefined;
-
   return (
     <menuActiveContext.Provider value={[selectedIndex, setSelectedIndex]}>
       <cartContext.Provider value={[cart, setCart]}>
+        <loggedUser.Provider value={[user, setUser]}>
+          <allProducts.Provider value={[products, setProduct]}>
+
         
-        <Router>
-            <div className={classes.root}>
-              <CssBaseline />
-              <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                    onClick={handleDrawerToggle}
-                    className={classes.menuButton}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                  <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                      <SearchIcon />
-                    </div>
-                    <InputBase
-                      placeholder="Search…"
-                      classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                      }}
-                      inputProps={{ 'aria-label': 'search' }}
-                    />
-                  </div>
-                  <div className={classes.grow} />
-                  <Link component={RouterLink} to='/' color="inherit">
-                    <ListItem button selected={selectedIndex === 0}>
-                      Home
-                    </ListItem>
-                  </Link>
-                  <Link component={RouterLink} to='/orders' color="inherit">
-                    <ListItem button selected={selectedIndex === 0}>
-                      Orders
-                    </ListItem>
-                  </Link>
-                  <Link href='/admin' color="inherit">
-                    Admin
-                  </Link>
-
-                  <IconButton aria-label="cart" onClick={toggleDrawer('right', true)}>
-                    <StyledBadge badgeContent={cart.length} color="secondary">
-                      <ShoppingCartIcon />
-                    </StyledBadge>
-                  </IconButton>
-                  <Drawer anchor={'right'} open={state['right']} onClose={toggleDrawer('right', false)}>
-                    {cartList('right')}
-                  </Drawer>
-
-                </Toolbar>
-              </AppBar>
-              <nav className={classes.drawer} aria-label="mailbox folders">
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                <Hidden smUp implementation="css">
-                  <Drawer
-                    container={container}
-                    variant="temporary"
-                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    classes={{
-                      paper: classes.drawerPaper,
-                    }}
-                    ModalProps={{
-                      keepMounted: true, // Better open performance on mobile.
-                    }}
-                  >
-                    {drawer}
-                  </Drawer>
-                </Hidden>
-                <Hidden xsDown implementation="css">
-                  <Drawer
-                    classes={{
-                      paper: classes.drawerPaper,
-                    }}
-                    variant="permanent"
-                    open
-                  >
-                    {drawer}
-                  </Drawer>
-                </Hidden>
-              </nav>
-              <main className={classes.content}>
-                <div className={classes.toolbar} />
-                  <Switch>
-                    <Route path='/review'>
-                      <Review></Review>
-                    </Route>
-                    <Route path='/orders'>
-                      <Orders></Orders>
-                    </Route>
-                    <Route exact path='/'>
-                      <Shop Products={products}></Shop>
-                    </Route>
+            <Router>
+                <div className={classes.root}>
+                  <CssBaseline />
+                  <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                      <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        className={classes.menuButton}
+                      >
+                        <MenuIcon />
+                      </IconButton>
+                      <div className={classes.search}>
+                        <div className={classes.searchIcon}>
+                          <SearchIcon />
+                        </div>
+                        <InputBase
+                          placeholder="Search…"
+                          classes={{
+                            root: classes.inputRoot,
+                            input: classes.inputInput,
+                          }}
+                          inputProps={{ 'aria-label': 'search' }}
+                        />
+                      </div>
+                      <div className={classes.grow} />
+                      <Link component={RouterLink} to='/' color="inherit">
+                        <ListItem button selected={selectedIndex === 0}>
+                          Home
+                        </ListItem>
+                      </Link>
+                      <Link component={RouterLink} to='/orders' color="inherit">
+                        <ListItem button selected={selectedIndex === 0}>
+                          Orders
+                        </ListItem>
+                      </Link>
+                      <Link href='/admin' color="inherit">
+                        <ListItem button selected={selectedIndex === 0}>
+                          Admin
+                        </ListItem>                        
+                      </Link>
+                      {user.name || <Link component={RouterLink} to='/login' color="inherit">
+                        <ListItem button selected={selectedIndex === 0}>
+                          Login
+                        </ListItem>
+                      </Link> }
                     
-                  </Switch>
-              </main>
-            </div>
-        </Router>
-        
+                      <IconButton aria-label="cart" onClick={toggleDrawer('right', true)}>
+                        <StyledBadge badgeContent={cart.length} color="secondary">
+                          <ShoppingCartIcon />
+                        </StyledBadge>
+                      </IconButton>
+                      <Drawer anchor={'right'} open={state['right']} onClose={toggleDrawer('right', false)}>
+                        {cartList('right')}
+                      </Drawer>
+
+                    </Toolbar>
+                  </AppBar>
+                  <nav className={classes.drawer} aria-label="mailbox folders">
+                    {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                    <Hidden smUp implementation="css">
+                      <Drawer
+                        container={container}
+                        variant="temporary"
+                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        classes={{
+                          paper: classes.drawerPaper,
+                        }}
+                        ModalProps={{
+                          keepMounted: true, // Better open performance on mobile.
+                        }}
+                      >
+                        {drawer}
+                      </Drawer>
+                    </Hidden>
+                    <Hidden xsDown implementation="css">
+                      <Drawer
+                        classes={{
+                          paper: classes.drawerPaper,
+                        }}
+                        variant="permanent"
+                        open
+                      >
+                        {drawer}
+                      </Drawer>
+                    </Hidden>
+                  </nav>
+                  <main className={classes.content}>
+                    <div className={classes.toolbar} />
+                      <Switch>
+                        <Route path='/register'>
+                          <Register></Register>
+                        </Route>
+                        <Route path='/login'>
+                          <Login></Login>
+                        </Route>
+                        <PrivateRoute path='/checkout'>
+                          <Checkout></Checkout>
+                        </PrivateRoute>
+                        <Route path='/review'>
+                          <Review></Review>
+                        </Route>
+                        <PrivateRoute path='/orders'>
+                          <Orders ></Orders>
+                        </PrivateRoute>
+                        <Route exact path='/'>
+                          <Shop></Shop>
+                        </Route>
+                      </Switch>
+                  </main>
+                </div>
+            </Router>
+            
+            </allProducts.Provider>
+        </loggedUser.Provider>
       </cartContext.Provider>
     </menuActiveContext.Provider>
   );

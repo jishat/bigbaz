@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Product from '../Product/Product';
 import { addToDatabaseCart, getDatabaseCart } from '../../databaseManager';
-import {cartContext} from '../Home/Home';
+import {allProducts, cartContext} from '../Home/Home';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,10 +17,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Shop = (props)=> {
+const Shop = ()=> {
     const classes = useStyles();
-    const products = props.Products;
     const [cart, setCart] = useContext(cartContext);
+    const [products, setProduct] = useContext(allProducts);
     
     
 

@@ -15,6 +15,15 @@ const App = ()=> {
   return (
       <Router>
         <Switch>
+          <Route path='/login'>
+            <Home></Home>
+          </Route>
+          <Route path='/register'>
+            <Home></Home>
+          </Route>
+          <Route path='/checkout'>
+            <Home></Home>
+          </Route>
           <Route path='/orders'>
             <Home></Home>
           </Route>

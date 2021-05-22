@@ -1,20 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
-import FolderIcon from '@material-ui/icons/Folder';
-import DeleteIcon from '@material-ui/icons/Delete';
+import React, { useContext } from 'react';
+import { allProducts } from '../Home/Home';
 import { Grid, Typography, List, ListItem, ListItemAvatar, ListItemIcon, Avatar, IconButton, ListItemText, ListItemSecondaryAction, Card, CardContent ,CardActions, Collapse, Divider  } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { allProducts, loggedUser } from '../Home/Home';
-import OrderedItem from '../OrderedItem/OrderedItem';
+import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
     priceQuantity: {
         textAlign: 'right',
         marginRight: '10px',
+        flexShrink: '0',
     },
     listItem:{
         marginBottom:'5px',
@@ -54,33 +48,33 @@ const useStyles = makeStyles((theme) => ({
     },
     mainCollapse:{
         backgroundColor:'#f7f7f7',
-    }
+    },
+    pos: {
+        marginBottom: 12,
+    },
 }));
-const Orders = () => {
+const OrderedListItem = (props) => {
+    const {productName, weight, price, quantity, imageURL} = props.productFind;
     const classes = useStyles();
-    const [expanded, setExpanded] = useState(false);
-    const [user, setUser] = useContext(loggedUser);
-    const [products, setProduct] = useContext(allProducts);
-    const [orders, setOrders] = useState([]);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-    useEffect(()=>{
-        fetch(`http://localhost:5000/allOrders/${user.email}`)
-        .then(res=>res.json())
-        .then(data=>setOrders(data))
-        .catch(err=>console.log(err))
-    },[user.email]);
     return (
-        <Grid container spacing={3}>
-            {
-                orders.map(ordr => <OrderedItem key={ordr._id} orders={ordr}></OrderedItem>)
-            }
-            
-        
-        </Grid>
+        <ListItem className={classes.listItem}>
+            <ListItemAvatar>
+                <Avatar alt={productName} src={imageURL} />
+            </ListItemAvatar>
+            <ListItemText
+                primary={productName}
+            />
+            <ListItemText
+                primary={quantity +  ' x ' + '৳' +price}
+                className={classes.priceQuantity}
+            />
+            <ListItemSecondaryAction>
+                {/* <IconButton edge="end" aria-label="delete">
+                    <DeleteIcon />
+                </IconButton> */}
+            </ListItemSecondaryAction>
+        </ListItem>
     );
 };
 
-export default Orders;
+export default OrderedListItem;
