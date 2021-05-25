@@ -65,7 +65,7 @@ const OrderedListItem = (props) => {
                 primary={productName}
             />
             <ListItemText
-                primary={quantity +  ' x ' + '৳' +price}
+                primary={quantity +  ' x ' + '৳ ' +price}
                 className={classes.priceQuantity}
             />
             <ListItemSecondaryAction>

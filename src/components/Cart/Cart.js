@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
         marginRight: '8px'
       }, 
       cartItemPrice:{
-        fontSize:"12px",
+        color:'#009e7f',
+        fontSize:"14px",
         fontWeight: '600',
         color: '#f50057',
         flexShrink: '0',

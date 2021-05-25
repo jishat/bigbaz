@@ -19,17 +19,11 @@ import { makeStyles, useTheme, fade, withStyles  } from '@material-ui/core/style
 import { Route, BrowserRouter as Router, Switch, Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import Admin from '../Admin/Admin';
-import { Button } from '@material-ui/core';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
 import Shop from '../Shop/Shop';
 import Orders from '../Orders/Orders';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
-import clsx from 'clsx';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Cart from '../Cart/Cart';
 import { addToDatabaseCart, getDatabaseCart } from '../../databaseManager';
 import Review from '../Review/Review';
 import Checkout from '../Checkout/Checkout';
@@ -53,9 +47,14 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
+      // width: `calc(100% - ${drawerWidth}px)`,
+      // marginLeft: drawerWidth,
+      zIndex: theme.zIndex.drawer + 1,
     },
+    backgroundColor:'#fff',
+    boxShadow:'rgb(0 0 0 / 6%) 0px 1px 2px',
+    color:'black',
+    
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -67,49 +66,15 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
+    border:'none!important',
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    backgroundColor:'#f5f4fd',
   },
   title: {
     flexGrow: 1,
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
   },
   list: {
     width: 250,
@@ -117,17 +82,9 @@ const useStyles = makeStyles((theme) => ({
   fullList: {
     width: 'auto',
   },
-  cartBody:{
-    marginTop:"15px",
-  },
-
-  cartFooter:{
-    textAlign:'center',
-    marginTop: '10px',
-    position: 'sticky',
-    bottom: '0',
-  },
+  
 }));
+
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -142,6 +99,7 @@ export const menuActiveContext = createContext()
 export const cartContext = createContext()
 export const loggedUser = createContext()
 export const allProducts = createContext()
+export const categoryContext = createContext()
 
 const Home = (props)=> {
   const { window } = props;
@@ -151,24 +109,24 @@ const Home = (props)=> {
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState([]);
   const [products, setProduct] = useState([]);
+  const [category, setCategory] = useState('all');
+  const [allCategory, setAllCategory] = useState([]);
 
   useEffect(()=>{
       fetch('http://localhost:5000/manageProduct')
       .then(res=>res.json())
-      .then(data=>setProduct(data))
-      .catch(err=>console.log(err))
+      .then(data=> setProduct(data))
+      .catch(err=>console.log(err));
   },[]);
 
   useEffect(()=>{
     const savedCart = getDatabaseCart();
-    
     const productKeys = Object.keys(savedCart);
     if(products.length > 0){
         const cartProduct = productKeys.map(key=>{
             const product = products.find(pd => pd._id === key);
             product.quantity = savedCart[key];
             return product;
-
         });
         setCart(cartProduct);
     }
@@ -184,6 +142,14 @@ const Home = (props)=> {
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
+  
+
+  useEffect(()=>{
+    const getAllCat = products.map(ct=> ct.category);
+    var unique = getAllCat.filter((v, i, a) => a.indexOf(v) === i);
+    setAllCategory(unique);
+  },[products])
+
 
   const drawer = (
     <div>
@@ -191,100 +157,66 @@ const Home = (props)=> {
       <div className={classes.toolbar}>
         ffhfgh
       </div>
-      <Divider />
       <List>
-        <Link component={RouterLink} to='/' color="inherit">
-          <ListItem button selected={selectedIndex === 0}>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
-            <ListItemText primary={'Home'} />
+          <ListItem  button>
+            <ListItemIcon></ListItemIcon>
+            <ListItemText/>
           </ListItem>
-        </Link>
-        <Link href='/admin' color="inherit">
-          <ListItem button selected={selectedIndex === 0}>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
-            <ListItemText primary={'Admin'} />
+          <ListItem onClick={()=>{setCategory('all')}} button selected={category.toLowerCase() == 'all'}>
+            <ListItemIcon></ListItemIcon>
+            <ListItemText primary={'All'} />
           </ListItem>
-        </Link>
+          {
+            allCategory.map(d=> 
+              <ListItem onClick={()=>{setCategory(d)}} button selected={category.toLowerCase() == d.toLowerCase()}>
+                <ListItemIcon></ListItemIcon>
+                <ListItemText primary={d} />
+              </ListItem>
+            )
+          }
+          
       </List>
     </div>
   );
-  const [state, setState] = useState({
-    right: false,
-  });
+  
 
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
+  
 
-    setState({ ...state, [anchor]: open });
-  };
-
-  const cartList = (anchor) => (
-    <div
-      className={clsx(classes.list, {
-        [classes.fullList]: anchor === 'top' || anchor === 'bottom',
-      })}
-      role="presentation"
-      // onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <div className={classes.cartBody}>
-        {
-          cart.map(c=> <Cart cart={c}></Cart>)
-        }
-      
-      </div>
-      
-      <div className={classes.cartFooter}>
-        <ButtonGroup disableElevation variant="contained" color="secondary">
-          
-          <Button onClick={toggleDrawer(anchor, false)}><Link component={RouterLink} to='/review' color="inherit">Review</Link></Button>
-          
-          <Button>৳ {cart.reduce((total, prd)=> total+prd.price*prd.quantity, 0)}</Button>
-        </ButtonGroup>
-      </div>
-    </div>
-  );
+  
+  // console.log(category);
   const container = window !== undefined ? () => window().document.body : undefined;
   return (
-    <menuActiveContext.Provider value={[selectedIndex, setSelectedIndex]}>
+    // <menuActiveContext.Provider value={[selectedIndex, setSelectedIndex]}>
       <cartContext.Provider value={[cart, setCart]}>
         <loggedUser.Provider value={[user, setUser]}>
           <allProducts.Provider value={[products, setProduct]}>
+            <categoryContext.Provider value={[category, setCategory]}>
 
-        
+              
             <Router>
                 <div className={classes.root}>
                   <CssBaseline />
                   <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
-                      <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        className={classes.menuButton}
-                      >
+                        <IconButton
+                          color="inherit"
+                          aria-label="open drawer"
+                          edge="start"
+                          onClick={handleDrawerToggle}
+                          className={classes.menuButton}
+                        >
                         <MenuIcon />
                       </IconButton>
-                      <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                          <SearchIcon />
-                        </div>
-                        <InputBase
-                          placeholder="Search…"
-                          classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput,
-                          }}
-                          inputProps={{ 'aria-label': 'search' }}
-                        />
-                      </div>
+                      <Link component={RouterLink} to='/' color="inherit">
+                        <ListItem button selected={selectedIndex === 0}>
+                          logo
+                        </ListItem>
+                      </Link>
+                      
                       <div className={classes.grow} />
                       <Link component={RouterLink} to='/' color="inherit">
                         <ListItem button selected={selectedIndex === 0}>
-                          Home
+                          Shop
                         </ListItem>
                       </Link>
                       <Link component={RouterLink} to='/orders' color="inherit">
@@ -303,14 +235,7 @@ const Home = (props)=> {
                         </ListItem>
                       </Link> }
                     
-                      <IconButton aria-label="cart" onClick={toggleDrawer('right', true)}>
-                        <StyledBadge badgeContent={cart.length} color="secondary">
-                          <ShoppingCartIcon />
-                        </StyledBadge>
-                      </IconButton>
-                      <Drawer anchor={'right'} open={state['right']} onClose={toggleDrawer('right', false)}>
-                        {cartList('right')}
-                      </Drawer>
+                      
 
                     </Toolbar>
                   </AppBar>
@@ -370,11 +295,14 @@ const Home = (props)=> {
                   </main>
                 </div>
             </Router>
-            
+           
+
+            </categoryContext.Provider>
+       
             </allProducts.Provider>
         </loggedUser.Provider>
       </cartContext.Provider>
-    </menuActiveContext.Provider>
+    // {/* </menuActiveContext.Provider> */}
   );
 }
 Home.propTypes = {
