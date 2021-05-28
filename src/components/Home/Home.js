@@ -123,7 +123,7 @@ const Home = (props)=> {
   const [menuActive, setMenuActive] = useState(0);
 
   useEffect(()=>{
-      fetch('http://localhost:5000/manageProduct')
+      fetch('https://guarded-basin-21088.herokuapp.com/manageProduct')
       .then(res=>res.json())
       .then(data=> setProduct(data))
       .catch(err=>console.log(err));

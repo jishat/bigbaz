@@ -25,7 +25,9 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Skeleton from '@material-ui/lab/Skeleton';
 import PropTypes from 'prop-types';
-
+import f1 from '../../assets/f-1.png';
+import f2 from '../../assets/f-2.png';
+import f3 from '../../assets/f-3.png';
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -334,6 +336,12 @@ const Shop = ()=> {
           </div>
           
         </Grid>
+
+            <Grid item md={4}><img src={f1} alt="" width="100%" style={{marginBottom:'10px'}}/></Grid>
+            <Grid item md={4}><img src={f2} alt="" width="100%" style={{marginBottom:'10px'}}/></Grid>
+            <Grid item md={4}><img src={f3} alt="" width="100%" style={{marginBottom:'10px'}}/></Grid>
+
+
         {
           products.length === 0 && loading()
         }

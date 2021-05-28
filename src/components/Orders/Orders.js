@@ -67,7 +67,7 @@ const Orders = () => {
         setExpanded(!expanded);
     };
     useEffect(()=>{
-        fetch(`http://localhost:5000/allOrders/${user.email}`)
+        fetch(`https://guarded-basin-21088.herokuapp.com/allOrders/${user.email}`)
         .then(res=>res.json())
         .then(data=>setOrders(data))
         .catch(err=>console.log(err))

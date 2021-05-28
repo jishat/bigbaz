@@ -114,6 +114,9 @@ const DialogTitle = withStyles(styles)((props) => {
       padding: theme.spacing(1),
     },
   }))(MuiDialogActions);
+
+const imgApi = process.env.REACT_APP_IMG_API;
+console.log(imgApi);
 const ShowProduct = (props) => {
     const classes=useStyle();
     const {productName,weight,price,category,imageURL,_id}=props.product
@@ -124,8 +127,8 @@ const ShowProduct = (props) => {
         if(imgEdit['length'] === 1){
 
             const imageData = new FormData();
-            const imageBB_Key='bbb594f564f8063ab9fb112e4308e253';
-            imageData.set('key', 'bbb594f564f8063ab9fb112e4308e253');
+            const imageBB_Key = 'bbb594f564f8063ab9fb112e4308e253';
+            imageData.set('key', imageBB_Key);
             imageData.append('image', imgEdit[0]);
             
             axios.post('https://api.imgbb.com/1/upload', 
@@ -141,7 +144,7 @@ const ShowProduct = (props) => {
                         category:categoryEdit,
                         imageURL:response.data.data.display_url
                     }
-                    fetch('http://localhost:5000/editProduct',{
+                    fetch('https://guarded-basin-21088.herokuapp.com/editProduct',{
                         method:'PATCH',
                         headers:{
                             'Content-Type':'application/json'
@@ -164,7 +167,7 @@ const ShowProduct = (props) => {
                 category:categoryEdit,
                 imageURL:imageURL
             }
-            fetch('http://localhost:5000/editProduct',{
+            fetch('https://guarded-basin-21088.herokuapp.com/editProduct',{
                 method:'PATCH',
                 headers:{
                     'Content-Type':'application/json'
@@ -180,7 +183,7 @@ const ShowProduct = (props) => {
     const handleDelete=(event, id)=>{
         const product=event.currentTarget.parentNode.parentNode;
 
-        const url = `http://localhost:5000/deleteProduct/${id}`;
+        const url = `https://guarded-basin-21088.herokuapp.com/deleteProduct/${id}`;
         fetch(url, {
             method: 'DELETE'
         })

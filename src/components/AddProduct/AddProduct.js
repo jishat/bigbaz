@@ -32,6 +32,7 @@ const useStyle=makeStyles(theme=>({
     }
 }))
 
+const imgApi = process.env.REACT_APP_IMG_API;
 
 const InputSection = () => {
     const classes=useStyle();
@@ -43,13 +44,12 @@ const InputSection = () => {
         const {productName, weight, price, category, img} = data;
         const imageData=new FormData();
         const imageBB_Key='bbb594f564f8063ab9fb112e4308e253';
-        imageData.set('key', 'bbb594f564f8063ab9fb112e4308e253');
+        imageData.set('key', imageBB_Key);
         imageData.append('image', img[0]);
 
         axios.post('https://api.imgbb.com/1/upload', 
         imageData)
         .then(function (response) {
-          console.log(response.data.data.display_url);
           if(response.data.data.display_url){
               const data={
                   productName:productName,
@@ -58,7 +58,7 @@ const InputSection = () => {
                   category:category,
                   imageURL:response.data.data.display_url
               }
-              fetch('http://localhost:5000/addProduct',{
+              fetch('https://guarded-basin-21088.herokuapp.com/addProduct',{
                   method:'POST',
                   headers:{
                     'Content-Type':'application/json'

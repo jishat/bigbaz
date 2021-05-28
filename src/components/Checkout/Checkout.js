@@ -37,7 +37,7 @@ const Checkout = () => {
         const savedCart = getDatabaseCart();
         const orderDetails = {...user, ...data, products:savedCart, subTotal:subAmount, totalAmount:totalAmount, orderTime:new Date()}
         console.log(orderDetails);
-        fetch('http://localhost:5000/addOrder',{
+        fetch('https://guarded-basin-21088.herokuapp.com/addOrder',{
             method: "POST",
             headers: {
             'Content-Type': 'application/json'
