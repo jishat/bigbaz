@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Grid, makeStyles } from '@material-ui/core';
+import { Avatar, Grid, makeStyles, TextField } from '@material-ui/core';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -12,17 +12,68 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const useStyle=makeStyles(theme=>({
-        productDetails:{
-                textAlign:'center',
-                ['& p']:{
-                        margin:'2px 0px'
-                },
-                ['& button']:{
-                        float:'right',
-                }
+    productDetails:{
+            textAlign:'center',
+            ['& p']:{
+                    margin:'2px 0px'
+            },
+            ['& button']:{
+                    float:'right',
+            }
+    },
+    pdName:{
+        fontSize: '15px',
+        marginBottom: '3px',
+        lineHeight: '1.2',
+    },
+    pdSubPrice:{
+        color: '#009e7f',
+        fontWeight: '600',
+        marginTop: '3px',
+    },
+    pdPrice:{
+        color: '#009e7f',
+        fontWeight: '800',
+        fontSize: '16px',
+        fontFamily: '"Nunito", sans-serif',
+    },
+    input:{
+        width:'100%',
+        border: '1px solid #efefef',
+        padding: '10px',
+        borderRadius: '4px',   
+    },
+    myBtn:{
+        backgroundColor: '#009e7f',
+        borderRadius: '100px',
+        marginBottom: '18px',
+        textTransform: 'capitalize',
+        fontSize: '16px',
+        border: 'none',
+        padding: '10px',
+        color: '#fff',
+        marginTop: '30px',
+        cursor: 'pointer',
+
+        "&:hover":{
+            backgroundColor: '#009e7f',
+            borderRadius: '100px',
         }
+    },
 }))
 
 const styles = (theme) => ({
@@ -72,7 +123,7 @@ const ShowProduct = (props) => {
         const {productNameEdit, weightEdit, priceEdit, categoryEdit, imgEdit} = data;
         if(imgEdit['length'] === 1){
 
-            const imageData=new FormData();
+            const imageData = new FormData();
             const imageBB_Key='bbb594f564f8063ab9fb112e4308e253';
             imageData.set('key', 'bbb594f564f8063ab9fb112e4308e253');
             imageData.append('image', imgEdit[0]);
@@ -98,7 +149,7 @@ const ShowProduct = (props) => {
                         body: JSON.stringify(getAllData)
                     })
                     .then(res => res.json())
-                    .then(d => console.log(d));
+                    .then(d => alert('Update success'));
                 }
             })
             .catch(function (error) {
@@ -121,22 +172,25 @@ const ShowProduct = (props) => {
                 body: JSON.stringify(getAllData)
             })
             .then(res => res.json())
-            .then(d => console.log(d));
+            .then(d => alert('Update success'));
         }
         
     };
 
-    const handleDelete=(event)=>{
-        const product=event.target.parentNode.parentNode;
-        const url = `http://localhost:5000/deleteProduct/${_id}`;
+    const handleDelete=(event, id)=>{
+        const product=event.currentTarget.parentNode.parentNode;
+
+        const url = `http://localhost:5000/deleteProduct/${id}`;
         fetch(url, {
             method: 'DELETE'
         })
         .then(res => res.json())
         .then(result => {
-           console.log('success delete');
-        })
             product.style.display='none';
+            alert('success delete');
+           
+        })
+            
     }
     const [open, setOpen] = React.useState(false);
 
@@ -150,24 +204,28 @@ const ShowProduct = (props) => {
 
     return (
         <>
-            <Grid container>
-                <Grid className={classes.productDetails} item xs={2} spacing={2} >
-                    <p>{productName}</p>
-                </Grid>
-                <Grid className={classes.productDetails}  item xs={2} spacing={2} >
-                    <p>{price}</p>
-                </Grid>
-                <Grid className={classes.productDetails}  item xs={5} spacing={2} >
-                    <p>{imageURL}</p>
-                </Grid>
-                <Grid className={classes.productDetails}  item xs={1} spacing={2} >
-                     <button onClick={handleClickOpen}>edit</button>
-                </Grid>
-                <Grid className={classes.productDetails}  item xs={1} spacing={2} >
-                    <button onClick={handleDelete}>delete</button>
-                </Grid>
-
-            </Grid>
+            <TableRow key={productName}>
+                <TableCell component="th" scope="row">
+                    <Avatar alt={productName} src={imageURL} />
+                </TableCell>
+                <TableCell align="left">
+                    <h2 className={classes.pdName}>{productName}</h2>
+                </TableCell>
+                <TableCell align="right">
+                    <Typography variant="body2" component="p" color="textSecondary">
+                    <h2 className={classes.pdName}>{weight}</h2>
+                    </Typography>
+                </TableCell>
+                <TableCell className={classes.pdPrice} align="right">{'৳ '+price}</TableCell>
+                <TableCell align="right">
+                    <IconButton edge="end" aria-label="delete" onClick={()=>handleClickOpen(_id)}>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete" id="222" onClick={(event)=>handleDelete(event, _id)}>
+                        <DeleteIcon />
+                    </IconButton>
+                </TableCell>
+            </TableRow>
             
             <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" fullWidth={true} maxWidth={'sm'} open={open}>
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
@@ -175,22 +233,50 @@ const ShowProduct = (props) => {
                 </DialogTitle>
                 <DialogContent dividers>
                     <form onSubmit={handleSubmit(onSubmit)}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={6}>
+                                <input className={classes.input} defaultValue={productName} {...register("productNameEdit", { required: true })}  label="Product Name" />
+                         
+                                {errors.productNameEdit && <Typography variant='body2' component='span' color='secondary'>This field is required</Typography>}
+                            </Grid>
+                            <Grid item xs={6}>
+                                <input className={classes.input} defaultValue={weight} {...register("weightEdit", { required: true })}  label="Weight" />
+                                {errors.weightEdit && <Typography variant='body2' component='span' color='secondary'>This field is required</Typography>}
+                            </Grid>
+                            <Grid item xs={6}>
+                                <input className={classes.input} defaultValue={price} {...register("priceEdit", { required: true })}  label="Price" />
+                                {errors.priceEdit && <Typography variant='body2' component='span' color='secondary'>This field is required</Typography>}
+                            </Grid>
+                            <Grid item xs={6}>
+                                <input className={classes.input} defaultValue={category} {...register("categoryEdit", { required: true })}  label="Category" />
+                                {errors.categoryEdit && <Typography variant='body2' component='span' color='secondary'>This field is required</Typography>}
+                            </Grid>
+                            <Grid item xs={6}>
+                                <input
+                                    accept="image/*"
+                                    style={{display:'none'}}
+                                    id="contained-button-file"
+                                    multiple
+                                    type="file"
+                                    {...register("imgEdit")}
+                                />
+                                <label htmlFor="contained-button-file">
+                                    <Button
+                                        variant="contained"
+                                        color="default"
+                                        startIcon={<CloudUploadIcon />}
+                                        component="span"
+                                    >
+                                        Upload
+                                    </Button>
+                                </label>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <input type="submit"  className={classes.myBtn}/>
+                            </Grid>
+                        </Grid>
+
                         
-                        <input defaultValue={productName} {...register("productNameEdit", { required: true })} />
-                        {errors.productNameEdit && <span>This field is required</span>} <br />
-
-                        <input defaultValue={weight} {...register("weightEdit", { required: true })} />
-                        {errors.weightEdit && <span>This field is required</span>}<br />
-        
-                        <input defaultValue={price} {...register("priceEdit", { required: true })} />
-                        {errors.priceEdit && <span>This field is required</span>}<br />
-
-                        <input defaultValue={category} {...register("categoryEdit", { required: true })} />
-                        {errors.categoryEdit && <span>This field is required</span>}<br />
-
-                        <input type="file"   {...register("imgEdit")} /><br />
-
-                        <input type="submit" />
                     </form>
                 </DialogContent>
             </Dialog>

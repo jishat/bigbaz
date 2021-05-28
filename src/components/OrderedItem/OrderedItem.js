@@ -8,6 +8,10 @@ import OrderedListItem from './OrderedListItem';
 import { allProducts } from '../Home/Home';
 
 const useStyles = makeStyles((theme) => ({
+    root:{
+        border:'none',
+        boxShadow:'none',
+    },
     priceQuantity: {
         textAlign: 'right',
         marginRight: '10px',
@@ -50,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
         padding:'20px 0px',
     },
     mainCollapse:{
-        backgroundColor:'#f7f7f7',
+        backgroundColor:'#ebeaef',
     },
     pos: {
         marginBottom: 12,
@@ -78,7 +82,7 @@ const OrderedItem = (props) => {
         hours = hours ? hours : 12; // the hour '0' should be '12'
         minutes = minutes < 10 ? '0'+minutes : minutes;
         var strTime = hours + ':' + minutes + ' ' + amPm;
-        return date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear() + " | " + strTime;
+        return date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear() + " | " + strTime;
       }
       
       const date = new Date(orderTime);
@@ -93,8 +97,8 @@ const OrderedItem = (props) => {
         <Grid item xs={12} md={6}>  
             <Card className={classes.root}>
                 <CardContent>
-                    <Typography variant="body1" component="h2">
-                        <strong>Order Date: {dt}</strong>
+                    <Typography variant="body1" component="h2" >
+                        <strong >Order Date: <span style={{ color:'#009e7f'}}>{dt}</span></strong>
                     </Typography>
                 </CardContent>
                 <Divider></Divider>
@@ -126,12 +130,13 @@ const OrderedItem = (props) => {
                             <div className={classes.eachSum} color="textSecondary">
                                 <Typography variant="body2" component="p" color="textSecondary">
                                     Delivery fee:
-                                </Typography>
+                                </Typography>                                
                                 <Typography variant="body2" component="p" color="textSecondary">
                                     ৳ 30
                                 </Typography>
                             </div>
                             <div className={classes.eachSum}>
+                                
                                 <Typography variant="body2" component="p">
                                     <strong>Total Amount:</strong> 
                                 </Typography>

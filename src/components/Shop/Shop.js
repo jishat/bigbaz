@@ -12,18 +12,32 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
-import { Typography } from '@material-ui/core';
+import { Divider, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import Cart from '../Cart/Cart';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { Button } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 import Drawer from '@material-ui/core/Drawer';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Skeleton from '@material-ui/lab/Skeleton';
+import PropTypes from 'prop-types';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+  },
+  cardRoot:{
+    height: '340px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    boxShadow: 'none',
+    backgroundColor:'#fff',
   },
   paper: {
     padding: theme.spacing(2),
@@ -93,6 +107,7 @@ const useStyles = makeStyles((theme) => ({
     "& > span> span":{
       display: 'flex',
       flexDirection: 'row',
+      color: '#fff',
     },
     "& > span> span>svg":{
       fontSize:'20px',
@@ -116,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   list: {
-    width: 300,
+    width: '320px',
   },
   fullList: {
     width: 'auto',
@@ -132,7 +147,7 @@ const useStyles = makeStyles((theme) => ({
     
     "& button":{
       backgroundColor:' #009e7f!important',
-      width: '240px',
+      width: '270px',
       padding: '5px 5px 5px 20px',
       color: '#fff!important',
       borderRadius: '100px',
@@ -150,15 +165,45 @@ const useStyles = makeStyles((theme) => ({
       display:'flex',
       justifyContent: 'space-between',
     },
-
+    "& button > span>p":{
+      color:'#fff',
+    },
     "& span>span":{
       backgroundColor:'#fff',
       color:'#009e7f!important',
       marginLeft: '15px',
       borderRadius:'100px',
       padding: '5px 15px',
+      fontWeight: '800',
     }
   },
+  carHeader:{
+    padding:'0 15px',
+    "& h3":{
+      display:'flex',
+      alignItems: 'center',
+      color: '#009e7f',
+    },
+    "& h3 svg":{
+      marginRight: '5px',
+    }
+  },
+  animationCard:{
+    height:'370px',
+  },
+  cardAction:{
+    display: 'flex',
+    justifyContent: 'space-around',
+    padding:' 8px 17px',
+    "& span":{
+      borderRadius:'100px',
+    }
+  },
+  cardContent:{
+    "& span":{
+      borderRadius:'100px',
+    }
+  }
 }));
 
 const Shop = ()=> {
@@ -169,8 +214,7 @@ const Shop = ()=> {
     const [drawerCart, setDrawerCart] = useState({
       right: false,
     });
-    
-    console.log(category);
+
     const handleAddToCart = (data)=>{
         const newProductKey = data._id;
         const sameProduct = cart.find(pd=>pd._id === newProductKey);
@@ -219,17 +263,20 @@ const Shop = ()=> {
         onKeyDown={toggleDrawer(anchor, false)}
       >
         <div className={classes.cartBody}>
+          <div className={classes.carHeader}>
+            <h3>  <LocalMallIcon/> {cart.length} Items</h3>
+          </div>
+          <Divider />
           {
             cart.map(c=> <Cart cart={c}></Cart>)
           }
         </div>
-        
         <div className={classes.cartFooter}>
-        <Link component={RouterLink} to='/review' color="inherit">
-            <Button onClick={toggleDrawer(anchor, false)}>
-              <Typography component='p'>Review</Typography>
-            <span >৳ {cart.reduce((total, prd)=> total+prd.price*prd.quantity, 0)}</span></Button>
-            </Link>
+          <Link component={RouterLink} to='/review' color="inherit">
+              <Button onClick={toggleDrawer(anchor, false)}>
+                <Typography component='p'>Review</Typography>
+              <span >৳ {cart.reduce((total, prd)=> total+prd.price*prd.quantity, 0)}</span></Button>
+          </Link>
         </div>
       </div>
     );
@@ -240,6 +287,34 @@ const Shop = ()=> {
       }
       setDrawerCart({ ...drawerCart, [anchor]: open });
     };
+
+    const loading = ()=>{
+      const totalAnimation = [1,2, 3,4,5,6,7,8];
+      return totalAnimation.map(t=> <Grid item md={3} sm={6} xs={12}>
+        <Card className={classes.cardRoot}>
+                <CardActionArea>
+                  <Skeleton variant="rect" width='100%'  height='200px'/>
+
+                    <CardContent className={classes.cardContent}>
+                      <Skeleton variant="rect" width='100%'  height='10px' />
+                      <br />
+                      <Skeleton variant="rect" width='100%'  height='10px'/>
+                      <br />
+                      <Skeleton variant="rect" width='100%'  height='10px'/>
+                    </CardContent>
+                    <CardActions className={classes.cardAction}>
+                      <Skeleton variant="rect" width='100%'  height='20px'/>
+                      <Skeleton variant="rect" width='100%'  height='20px'/>
+                    </CardActions>
+                </CardActionArea>
+            
+            </Card>
+
+         
+
+      </Grid>
+      )
+    }
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
@@ -257,8 +332,14 @@ const Shop = ()=> {
                 inputProps={{ 'aria-label': 'search' }}
               />
           </div>
+          
         </Grid>
-        {products.map(pd=> category.toLowerCase() == pd.category.toLowerCase() ? <Product key={pd._id} products={pd} handleRemoveFromCart={handleRemoveFromCart} handleAddToCart={handleAddToCart}></Product> :( category.toLowerCase() == 'all' ? <Product key={pd._id} products={pd} handleRemoveFromCart={handleRemoveFromCart} handleAddToCart={handleAddToCart}></Product> : ''))
+        {
+          products.length === 0 && loading()
+        }
+        
+        {
+        products.map(pd=> category.toLowerCase() == pd.category.toLowerCase() ? <Product key={pd._id} products={pd} handleRemoveFromCart={handleRemoveFromCart} handleAddToCart={handleAddToCart}></Product> :( category.toLowerCase() == 'all' ? <Product key={pd._id} products={pd} handleRemoveFromCart={handleRemoveFromCart} handleAddToCart={handleAddToCart}></Product> : ''))
         }
         <Fab variant="extended" aria-label="add"  onClick={toggleDrawer('right', true)} className={classes.floatCart}>
           <span>

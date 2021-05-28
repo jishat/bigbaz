@@ -28,6 +28,14 @@ const useStyles = makeStyles((theme) => ({
     },
     checkoutBtn:{
         width: '100%',
+        backgroundColor: '#009e7f',
+        borderRadius: '100px',
+        marginBottom: '18px',
+        textTransform: 'capitalize',
+        fontSize: '16px',
+        "&:hover":{
+            backgroundColor: '#009e7f',
+        }
     }
 }));
 

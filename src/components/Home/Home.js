@@ -11,7 +11,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -30,6 +29,11 @@ import Checkout from '../Checkout/Checkout';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
+import Avatar from '@material-ui/core/Avatar';
+import { Button } from '@material-ui/core';
+import  firebase from "firebase/app";
+import "firebase/auth";
+import firebaseConfig from"../../firebaseConfig";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -82,18 +86,23 @@ const useStyles = makeStyles((theme) => ({
   fullList: {
     width: 'auto',
   },
-  
+  logo:{
+    fontSize: '24px',
+    fontWeight: '900',
+    "& span":{
+      fontSize: '24px',
+      fontWeight: '900',
+      color:'#009e7f',
+    }
+  },
+  menuItem:{
+    color: '#324054',
+    fontWeight: '700',
+    fontSize: '15px',
+
+  }
 }));
 
-
-const StyledBadge = withStyles((theme) => ({
-  badge: {
-    right: -3,
-    top: 13,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
-  },
-}))(Badge);
 
 export const menuActiveContext = createContext()
 export const cartContext = createContext()
@@ -111,6 +120,7 @@ const Home = (props)=> {
   const [products, setProduct] = useState([]);
   const [category, setCategory] = useState('all');
   const [allCategory, setAllCategory] = useState([]);
+  const [menuActive, setMenuActive] = useState(0);
 
   useEffect(()=>{
       fetch('http://localhost:5000/manageProduct')
@@ -180,8 +190,18 @@ const Home = (props)=> {
   );
   
 
-  
-
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }else {
+      firebase.app(); // if already initialized, use that one
+  }
+  const logOut= ()=>{
+    firebase.auth().signOut().then(() => {
+      setUser([]);
+    }).catch((error) => {
+      alert(error);
+    });
+  }
   
   // console.log(category);
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -208,35 +228,36 @@ const Home = (props)=> {
                         <MenuIcon />
                       </IconButton>
                       <Link component={RouterLink} to='/' color="inherit">
-                        <ListItem button selected={selectedIndex === 0}>
-                          logo
-                        </ListItem>
+                        <Typography className={classes.logo}>
+                          <span>Big</span>Baz
+                        </Typography>
                       </Link>
                       
                       <div className={classes.grow} />
-                      <Link component={RouterLink} to='/' color="inherit">
-                        <ListItem button selected={selectedIndex === 0}>
+                      <Link component={RouterLink} to='/' color="inherit"  className={classes.menuItem}>
+                        <ListItem button selected={menuActive === 0} onClick={()=>setMenuActive(0)}>
                           Shop
                         </ListItem>
                       </Link>
-                      <Link component={RouterLink} to='/orders' color="inherit">
-                        <ListItem button selected={selectedIndex === 0}>
+                      <Link component={RouterLink} to='/orders' color="inherit" className={classes.menuItem} onClick={()=>setMenuActive(1)}>
+                        <ListItem button selected={menuActive === 1} onClick={()=>setMenuActive(1)}>
                           Orders
                         </ListItem>
                       </Link>
-                      <Link href='/admin' color="inherit">
-                        <ListItem button selected={selectedIndex === 0}>
+                      <Link href='/admin' color="inherit" className={classes.menuItem}>
+                        <ListItem button selected={menuActive === 2} onClick={()=>setMenuActive(2)}>
                           Admin
                         </ListItem>                        
                       </Link>
-                      {user.name || <Link component={RouterLink} to='/login' color="inherit">
-                        <ListItem button selected={selectedIndex === 0}>
+                      {  user.name ? <span style={{display:'flex', alignItems: 'center'}}><Avatar src={user.photo || '/broken-image.jpg'} /> <strong style={{marginLeft:'6px', color:'#009e7f', fontSize: '16px'}}>{user.name}</strong> </span>  : <Link component={RouterLink} to='/login' color="inherit" className={classes.menuItem}>
+                        <ListItem button selected={menuActive === 3} onClick={()=>setMenuActive(3)}>
                           Login
                         </ListItem>
                       </Link> }
-                    
+                      {
+                        user.name && <Button  variant="contained" size="small" color="default"  style={{fontWeight:'700', marginLeft:'15px'}} onClick={logOut}>Log out</Button>
+                      }
                       
-
                     </Toolbar>
                   </AppBar>
                   <nav className={classes.drawer} aria-label="mailbox folders">

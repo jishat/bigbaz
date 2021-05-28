@@ -18,9 +18,10 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import MailIcon from '@material-ui/icons/Mail';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import './Product.css';
 const useStyles = makeStyles({
   root: {
-    height: '360px',
+    height: '370px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -38,13 +39,14 @@ const useStyles = makeStyles({
     fontSize: '16px',
   },
   cardAction:{
-      display: 'flex',
-      justifyContent: 'space-around',
-      "& h3":{
+    display: 'flex',
+    justifyContent: 'space-around',
+    padding: '8px 8px 22px 8px',
+    "& h3":{
         color: '#009e7f',
         fontSize: '16px',
         fontWeight: '700',
-      }
+    },
   },
   counterBtn:{
       "& button":{
@@ -60,21 +62,30 @@ const useStyles = makeStyles({
       "& button:hover":{
         backgroundColor:' #009e7f',
         color: '#fff!important',
+      },
+      "& button span":{
+          color:'#fff',
       }
   },
   button:{
+    "& span":{
+        color:'#009e7f',
+    },
     "&:hover":{
         backgroundColor:' #009e7f',
         color: '#fff!important',
       },
+    "&:hover span":{
+    color: '#fff!important',
+    },
     borderColor:' #009e7f!important',
-    color:' #009e7f!important',
     padding: '6px 13px',
     borderRadius: '100px',
     fontSize: '12px',
     fontWeight: '600',
     textTransform: 'capitalize', 
     alignItems: 'end',
+    
   },
   productContent:{
       backgroundColor:'#fff',
@@ -110,13 +121,15 @@ const Product = (props)=> {
 
             <Card className={classes.root}>
                 <CardActionArea className={classes.productContent}>
+
                     <CardMedia
-                    component="img"
-                    alt={productName}
-                    height="200"
-                    image={imageURL}
-                    title={productName}
-                    />
+                        component="img"
+                        alt={productName}
+                        height="200"
+                        image={imageURL}
+                        title={productName}
+                        />
+
                     <CardContent className={classes.cardContent}>
                         <Typography gutterBottom variant="body1" component="h2" className={classes.productName}>
                             {productName}
@@ -171,4 +184,6 @@ const Product = (props)=> {
         
     );
 }
+
+  
 export default Product

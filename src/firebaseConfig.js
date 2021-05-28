@@ -1,10 +1,16 @@
+const api_key = process.env.REACT_APP_API_KEY;
+const auth_domain = process.env.REACT_APP_AUTH_DOMAIN;
+const project_id = process.env.REACT_APP_PROJECT_ID;
+const storage_bucket = process.env.REACT_APP_STORAGE_BUCKET;
+const msg_sender_id = process.env.REACT_APP_MESSAGING_SENDER_ID;
+const app_id = process.env.REACT_APP_APP_ID;
 const firebaseConfig = {
-    apiKey: "AIzaSyDBhQ_U7gUf9cTeJ7WuAvNUttHMMSIZmDg",
-    authDomain: "bigbaz-8b00e.firebaseapp.com",
-    projectId: "bigbaz-8b00e",
-    storageBucket: "bigbaz-8b00e.appspot.com",
-    messagingSenderId: "1093253683745",
-    appId: "1:1093253683745:web:b27b6fdb1596f552b96160"
+    apiKey: api_key,
+    authDomain: auth_domain,
+    projectId: project_id,
+    storageBucket: storage_bucket,
+    messagingSenderId: msg_sender_id,
+    appId: app_id
   };
 export default firebaseConfig;
  // Initialize Firebase

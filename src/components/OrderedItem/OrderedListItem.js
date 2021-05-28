@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     },
     listItem:{
         marginBottom:'5px',
-        background: '#f7f7f7',
+        background: '#ebeaef',
     },
     expand: {
         transform: 'rotate(0deg)',

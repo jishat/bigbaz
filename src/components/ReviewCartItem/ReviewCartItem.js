@@ -17,6 +17,41 @@ const useStyles = makeStyles((theme) => ({
     listItem:{
         marginBottom:'5px',
         background: '#fff',
+    },
+    counterBtn:{
+        "& button":{
+          backgroundColor:' #009e7f',
+          minWidth: '35px',
+          padding: '4px 8px',
+          color: '#fff!important',
+          borderRadius: '100px',
+          border: '0px!important',
+          fontSize: '15px',
+          fontWeight: '600',
+        },
+        "& button:hover":{
+          backgroundColor:' #009e7f',
+          color: '#fff!important',
+        },
+        "& button span":{
+            color:'#fff',
+        }
+    },
+    pdName:{
+        fontSize: '15px',
+        marginBottom: '3px',
+        lineHeight: '1.2',
+    },
+    pdSubPrice:{
+        color: '#009e7f',
+        fontWeight: '600',
+        marginTop: '3px',
+    },
+    pdPrice:{
+        color: '#009e7f',
+        fontWeight: '800',
+        fontSize: '16px',
+        fontFamily: '"Nunito", sans-serif',
     }
 }));
 
@@ -36,19 +71,17 @@ const ReviewCartItem = (props) => {
                     <Avatar alt={productName} src={imageURL} />
                 </TableCell>
                 <TableCell align="left">
-                    <Typography variant="body2" component="p">
-                        <strong>{productName}</strong>
-                    </Typography>
+                    <h2 className={classes.pdName}>{productName}</h2>
                     <Typography variant="body2" component="p" color="textSecondary">
                         {weight}
                     </Typography>
-                    <Typography variant="body2" component="p" color="textSecondary">
+                    <Typography variant="body2" component="p" color="textSecondary" className={classes.pdSubPrice}>
                         {'৳ '+price}
                     </Typography>
                     
                 </TableCell>
                 <TableCell align="center">
-                <ButtonGroup>
+                <ButtonGroup className={classes.counterBtn}>
                         <Button
                             aria-label="reduce"
                             onClick={() => {
@@ -73,7 +106,7 @@ const ReviewCartItem = (props) => {
                         </Button>
                     </ButtonGroup>
                 </TableCell>
-                <TableCell align="right">{'৳ '+price}</TableCell>
+                <TableCell className={classes.pdPrice} align="right">{'৳ '+price * quantity}</TableCell>
                 <TableCell align="right"><IconButton edge="end" aria-label="delete" onClick={()=>handleRemoveProduct(_id)}>
                         <DeleteIcon />
                     </IconButton></TableCell>

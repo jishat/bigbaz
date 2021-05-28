@@ -2,6 +2,12 @@ import { Grid, makeStyles } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { menuActiveContext } from '../Admin/Admin';
 import ShowProduct from './ShowProduct';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 const useStyle=makeStyles(theme=>({
     productDetails:{
@@ -10,6 +16,18 @@ const useStyle=makeStyles(theme=>({
         ['& p']:{
             margin:'0'
         },
+    },
+    myTable:{
+        backgroundColor: '#fff',
+        "& thead": {
+            backgroundColor: '#009e7f',
+        },
+        "& thead > tr > th":{
+            color:'#fff',
+        },
+        "& th":{
+            fontWeight: '700',
+        }
     }
 }))
 const ManageProduct = () => {
@@ -27,18 +45,24 @@ const ManageProduct = () => {
     return (
         <div> 
             <Grid container>
-                <Grid className={classes.productDetails} item xs={2} spacing={2} >
-                    <p>Product Name</p>
-                </Grid>
-                <Grid className={classes.productDetails}  item xs={2} spacing={2} >
-                    <p>Price</p>
-                </Grid>
-                <Grid className={classes.productDetails}  item xs={5} spacing={2} >
-                    <p>Image URL</p>
-                </Grid>
+                <TableContainer>
+                    <Table className={classes.myTable} aria-label="caption table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="left">Image</TableCell>
+                                <TableCell align="left">Product Name</TableCell>
+                                <TableCell align="right">Weight</TableCell>
+                                <TableCell align="right">Price</TableCell>
+                                <TableCell align="right"></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {product.map(pd=><ShowProduct key={pd._id} product={pd}></ShowProduct>)}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Grid>
-            {product.map(pd=><ShowProduct key={pd._id} product={pd}></ShowProduct>)}
-            {/* {product.map(pd=>console.log(pd))} */}
+            
         </div>
     );
 };

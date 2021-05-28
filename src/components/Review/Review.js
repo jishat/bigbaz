@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#fff',
         "& thead": {
             backgroundColor: '#e8ebf1',
+        },
+        "& th":{
+            fontWeight: '700',
         }
     }
 }));

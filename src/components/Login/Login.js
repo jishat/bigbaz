@@ -1,22 +1,31 @@
 import React, { useContext } from 'react';
+import './Login.css';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Grid } from '@material-ui/core';
+import { CardHeader, Divider, Grid } from '@material-ui/core';
 import { useForm } from "react-hook-form";
 import { cartContext, loggedUser } from '../Home/Home';
 import  firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConfig from"../../firebaseConfig";
 import { useHistory, useLocation } from 'react-router';
-
+import TextField from '@material-ui/core/TextField';
+import { RiGoogleFill } from "react-icons/ri";
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 275,
+    width: '100%',
+    border: 'unset',
+    padding: '15px',
+  },
+  input: {
+    width: '100%',
+    marginTop: '10px',
   },
   bullet: {
     display: 'inline-block',
@@ -29,6 +38,45 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  mainLoginSection:{
+      justifyContent:'center',
+  },
+  myBtn:{
+        width: '100%',
+        backgroundColor: '#009e7f',
+        borderRadius: '100px',
+        marginBottom: '18px',
+        textTransform: 'capitalize',
+        fontSize: '16px',
+        border: 'none',
+        padding: '10px',
+        color: '#fff',
+        marginTop: '30px',
+        cursor: 'pointer',
+
+        "&:hover":{
+            backgroundColor: '#009e7f',
+            borderRadius: '100px',
+        }
+    },
+    googleBtn:{
+        height:'38px',
+        backgroundColor:'white',
+        border:'2px solid #009e7f',
+        color:'black',
+        fontWeight:'bold',
+        borderRadius: '100px',
+        cursor: 'pointer',
+        ['& strong']:{
+            margin:'7px 0px',
+            display:'block'
+        }
+    },
+    icon:{
+        fontSize: '28px',
+        margin: '3px',
+        color:'#009e7f',
+    }
 });
 
 const Login = ()=> {
@@ -77,7 +125,6 @@ const Login = ()=> {
         .then((result) => {
             /** @type {firebase.auth.OAuthCredential} */
             var credential = result.credential;
-
             // This gives you a Google Access Token. You can use it to access the Google API.
             var token = credential.accessToken;
             // The signed-in user info.
@@ -112,25 +159,46 @@ const Login = ()=> {
         }
     }
   return (
-      <Grid container>
-          <Card className={classes.root} variant="outlined">
-            <CardContent>
-                <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container className={classes.mainLoginSection}>
+          <Grid item xs={12} sm={5}>
+                
+            <Card className={classes.root} variant="outlined">
+                <CardContent>
+                    <Typography variant="title" component="h2" style={{textAlign:'center'}}>Login here</Typography>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <TextField
+                            label="Email"
+                            autoComplete="email"
+                            className={classes.input}
+                            {...register("email", { required: true, pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ })}
+                        />
+                        {errors.email && (errors.email.type === 'required' ? <Typography variant='body2' component='span' color='secondary'>This field is required</Typography>:<Typography variant='body2' component='span' color='secondary'>Invalid email address</Typography>)} <br />
+                        
+                        <TextField
+                            label="Password"
+                            autoComplete="password"
+                            className={classes.input}
+                            {...register("password", { required: true })}
+                        />
+                        {errors.password && <Typography variant='body2' component='span' color='secondary'>Password is required</Typography>} <br />
 
-                    <input placeholder="Email" {...register("email", { required: true, pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ })} />
-                    {errors.email && (errors.email.type === 'required' ? <span>This field is required</span> :<span>Invalid email address</span>)} <br />
+                        <input type="submit" className={classes.myBtn}/>
+                    </form>
 
-                    <input placeholder="Password" {...register("password", { required: true })} />
-                    {errors.password && <span>This field is required</span>} <br />
-
-                    <input type="submit" />
-                </form>
-            </CardContent>
-            <CardActions>
-                <Button size="small" onClick={signInGoogle}>google</Button>
-            </CardActions>
+                    <Grid container className={classes.googleBtn}>
+                        <Grid item xs={4}><RiGoogleFill className={classes.icon}/></Grid>
+                        <Grid item xs={7} onClick={signInGoogle}>
+                        <strong>Continue with Google</strong>
+                        </Grid>
+                    </Grid>
+                    <Typography variant="body2" color='primary' style={{textAlign:'center', marginTop:'20px'}}>
+                        <Link to='/register' style={{color:'009e7f'}}><strong>Haven't account? Create an account</strong></Link>
+                    </Typography>
+                </CardContent>
+                    
             </Card>
-  
+    
+          </Grid>
       </Grid>
     );
 }

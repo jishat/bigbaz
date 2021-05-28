@@ -21,6 +21,10 @@ import AddProduct from '../AddProduct/AddProduct';
 import ManageProduct from '../ManageProduct/ManageProduct';
 import Link from '@material-ui/core/Link';
 import App from '../../App';
+import HomeIcon from '@material-ui/icons/Home';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -35,9 +39,14 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
+      // width: `calc(100% - ${drawerWidth}px)`,
+      // marginLeft: drawerWidth,
+      zIndex: theme.zIndex.drawer + 1,
+
     },
+    backgroundColor:'#fff',
+    boxShadow:'rgb(0 0 0 / 6%) 0px 1px 2px',
+    color:'black',
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -49,11 +58,25 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
+    backgroundColor: '#172f2a',
+    color: '#fff',
+    "& svg":{
+      color:"#51736c",
+    }
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  logo:{
+    fontSize: '24px',
+    fontWeight: '900',
+    "& span":{
+      fontSize: '24px',
+      fontWeight: '900',
+      color:'#009e7f',
+    }
+  }
 }));
 
 export const menuActiveContext = createContext()
@@ -79,27 +102,21 @@ const Admin = (props)=> {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {/* <Link component={RouterLink} to='/' color="inherit">
-          <ListItem button selected={selectedIndex === 0}>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
-            <ListItemText primary={'Home'} />
-          </ListItem>
-        </Link> */}
         <Link href='/' color="inherit">
-          <ListItem button selected={selectedIndex === 0}>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
-            <ListItemText primary={'Home'} />
+          <ListItem button selected={selectedIndex === 6}>
+            <ListItemIcon><HomeIcon /></ListItemIcon>
+            <ListItemText primary={'Shop'} />
           </ListItem>
         </Link>
         <Link component={RouterLink} to='/admin/manageProduct' color="inherit">
           <ListItem button selected={selectedIndex === 0}>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
+            <ListItemIcon><DashboardIcon /></ListItemIcon>
             <ListItemText primary={'Manage Products'} />
           </ListItem>
         </Link>
         <Link component={RouterLink} to='/admin/addProduct' color="inherit">
           <ListItem button selected={selectedIndex === 1}>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
+            <ListItemIcon><AddBoxIcon /></ListItemIcon>
             <ListItemText primary={'Add Product'} />
           </ListItem>
         </Link>
@@ -129,6 +146,13 @@ const Admin = (props)=> {
                 >
                   <MenuIcon />
                 </IconButton>
+                <Link component={RouterLink} to='/' color="inherit">
+                  <Typography className={classes.logo}>
+                    <span>Big</span>Baz
+                  </Typography>
+                </Link>
+                      
+                <div className={classes.grow} />
               </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="mailbox folders">
