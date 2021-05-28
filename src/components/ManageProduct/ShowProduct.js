@@ -115,8 +115,6 @@ const DialogTitle = withStyles(styles)((props) => {
     },
   }))(MuiDialogActions);
 
-const imgApi = process.env.REACT_APP_IMG_API;
-console.log(imgApi);
 const ShowProduct = (props) => {
     const classes=useStyle();
     const {productName,weight,price,category,imageURL,_id}=props.product

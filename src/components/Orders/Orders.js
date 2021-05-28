@@ -62,6 +62,7 @@ const Orders = () => {
     const [user, setUser] = useContext(loggedUser);
     const [products, setProduct] = useContext(allProducts);
     const [orders, setOrders] = useState([]);
+    document.title="Orders | Bigbaz Online shopping";
 
     const handleExpandClick = () => {
         setExpanded(!expanded);

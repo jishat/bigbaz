@@ -32,7 +32,6 @@ const useStyle=makeStyles(theme=>({
     }
 }))
 
-const imgApi = process.env.REACT_APP_IMG_API;
 
 const InputSection = () => {
     const classes=useStyle();

@@ -85,6 +85,7 @@ const Login = ()=> {
     const [cart, setCart] = useContext(cartContext);
     const [user, setUser] = useContext(loggedUser);
     const totalAmount = cart.reduce((total, prd)=> total+prd.price*prd.quantity, 30);
+    document.title="Login | Bigbaz Online shopping";
     
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);

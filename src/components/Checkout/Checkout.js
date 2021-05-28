@@ -30,6 +30,8 @@ const Checkout = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const [cart, setCart] = useContext(cartContext);
     const [user, setUser] = useContext(loggedUser);
+    document.title="Checkout | Bigbaz Online shopping";
+
     const history = useHistory();
     const totalAmount = cart.reduce((total, prd)=> total+prd.price*prd.quantity, 30);
     const subAmount = cart.reduce((total, prd)=> total+prd.price*prd.quantity, 0);

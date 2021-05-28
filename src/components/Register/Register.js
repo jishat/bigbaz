@@ -84,6 +84,7 @@ const Register = ()=> {
     const [cart, setCart] = useContext(cartContext);
     const [user, setUser] = useContext(loggedUser);
     const totalAmount = cart.reduce((total, prd)=> total+prd.price*prd.quantity, 30);
+    document.title="Register | Bigbaz Online shopping";
     
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
@@ -170,7 +171,7 @@ const Register = ()=> {
         <Grid item xs={12} sm={5}>
           <Card className={classes.root} variant="outlined">
             <CardContent>
-                <Typography variant="title" component="h2" style={{textAlign:'center'}}>Login here</Typography>
+                <Typography variant="title" component="h2" style={{textAlign:'center'}}>Register here</Typography>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <TextField
                       label="Full Name"

@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 const Review = () => {
     const [cart, setCart] = useContext(cartContext);
     const classes = useStyles();
+    document.title="Review | Bigbaz Online shopping";
 
     const handleRemoveProduct = (id)=>{
         const afterRemoveProduct = cart.filter(pd=> pd._id !== id);

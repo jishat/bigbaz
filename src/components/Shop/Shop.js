@@ -216,6 +216,7 @@ const Shop = ()=> {
     const [drawerCart, setDrawerCart] = useState({
       right: false,
     });
+    document.title="Shop | Bigbaz Online shopping";
 
     const handleAddToCart = (data)=>{
         const newProductKey = data._id;
