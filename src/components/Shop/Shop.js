@@ -33,6 +33,17 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
+  containerClass:{
+    // width: 'calc(100% + 8px)',
+    // margin: '-4px',
+    
+    "& > .MuiGrid-item":{
+      padding: "4px",
+      [theme.breakpoints.up('sm')]: {
+        padding: "12px",
+      },
+    }
+  },
   cardRoot:{
     height: '340px',
     display: 'flex',
@@ -205,7 +216,8 @@ const useStyles = makeStyles((theme) => ({
     "& span":{
       borderRadius:'100px',
     }
-  }
+  },
+  
 }));
 
 const Shop = ()=> {
@@ -320,7 +332,7 @@ const Shop = ()=> {
     }
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
+      <Grid container className={classes.containerClass}>
         <Grid item xs={12}>
           <div className={classes.search}>
               <div className={classes.searchIcon}>

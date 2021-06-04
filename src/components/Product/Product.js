@@ -19,9 +19,9 @@ import MailIcon from '@material-ui/icons/Mail';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import './Product.css';
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    height: '370px',
+    height: '298px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -30,22 +30,45 @@ const useStyles = makeStyles({
     // "& :hover":{
     //     backgroundColor:'#fff',
     //   }
+    [theme.breakpoints.up('sm')]: {
+        height: '370px',
+    },
   },
   cardContent:{
     textAlign:'center',
     flexGrow: 1,
+    padding: '5px',
+    [theme.breakpoints.up('sm')]: {
+        padding: '16px',
+    },
+    "& > p":{
+        fontSize:'12px',
+        [theme.breakpoints.up('sm')]: {
+            fontSize:'14px',
+        },
+    }
   },
   productName:{
-    fontSize: '16px',
+    fontSize: '13px',
+    [theme.breakpoints.up('sm')]: {
+        fontSize: '16px',
+    },
   },
   cardAction:{
     display: 'flex',
     justifyContent: 'space-around',
     padding: '8px 8px 22px 8px',
+    flexDirection:'column',
     "& h3":{
         color: '#009e7f',
-        fontSize: '16px',
+        fontSize: '18px',
         fontWeight: '700',
+        [theme.breakpoints.up('sm')]: {
+            fontSize: '16px',
+        },
+    },
+    [theme.breakpoints.up('sm')]: {
+        flexDirection:'row',
     },
   },
   counterBtn:{
@@ -58,6 +81,10 @@ const useStyles = makeStyles({
         border: '0px!important',
         fontSize: '15px',
         fontWeight: '600',
+        marginTop:'6px',
+        [theme.breakpoints.up('sm')]: {
+            marginTop:'0',
+        },
       },
       "& button:hover":{
         backgroundColor:' #009e7f',
@@ -85,15 +112,24 @@ const useStyles = makeStyles({
     fontWeight: '600',
     textTransform: 'capitalize', 
     alignItems: 'end',
-    
+    marginTop:'5px',
+    [theme.breakpoints.up('sm')]: {
+        marginTop:'0',
+    },
   },
   productContent:{
-      backgroundColor:'#fff',
-      "& img":{
-        padding: '23px 35px 0px 35px',
-      }
+    backgroundColor:'#fff',
+    "& img":{
+        padding: '15px 15px 0px 15px',
+        height: '132px',
+        [theme.breakpoints.up('sm')]: {
+            padding: '23px 35px 0px 35px',
+            height: 'unset',
+        },
+    },
+    
   }
-});
+}));
 
 const Product = (props)=> {
     const classes = useStyles();
@@ -117,7 +153,7 @@ const Product = (props)=> {
     }, [cart]);
 
     return (
-        <Grid item md={3} sm={6} xs={12}>
+        <Grid item md={3} sm={6} xs={6}>
 
             <Card className={classes.root}>
                 <CardActionArea className={classes.productContent}>

@@ -61,9 +61,10 @@ const useStyles = makeStyles((theme) => ({
     
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: 0,
     [theme.breakpoints.up('sm')]: {
       display: 'none',
+      // marginRight: theme.spacing(2),
     },
   },
   // necessary for content to be below app bar
@@ -87,19 +88,33 @@ const useStyles = makeStyles((theme) => ({
     width: 'auto',
   },
   logo:{
-    fontSize: '24px',
+    fontSize: '20px',
     fontWeight: '900',
     "& span":{
-      fontSize: '24px',
+      // fontSize: '24px',
       fontWeight: '900',
       color:'#009e7f',
-    }
+      
+    },
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '24px',
+    },
   },
   menuItem:{
     color: '#324054',
     fontWeight: '700',
-    fontSize: '15px',
-
+    fontSize: '12px',
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '15px',
+    },
+    "& div":{
+      paddingLeft: '7px',
+      paddingRight: '7px',
+      [theme.breakpoints.up('sm')]: {
+        paddingLeft: '16px',
+        paddingRight: '16px',
+      },
+    }
   }
 }));
 
